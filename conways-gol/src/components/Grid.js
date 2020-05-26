@@ -39,16 +39,16 @@ const Grid = () => {
       <div>
         <button onClick={() => setGrid(liveOn(grid))}>Live and Let Die</button>
 
-        <button onClick={() => setGrid(buildLifeMap(10, lifeMap))}>
+        <button onClick={() => setGrid(buildLifeMap(100, lifeMap))}>
           Random Initialize
         </button>
-        <button onClick={() => setLifeMap(generateLife(10))}>
+        <button onClick={() => setLifeMap(generateLife(100))}>
           Generate Lifemap
         </button>
       </div>
       {grid.map((row) => {
         return (
-          <div>
+          <div style={{ height: '10px' }}>
             {row.map((life) => {
               return <Cell alive={life} />;
             })}
