@@ -4,40 +4,21 @@ import { generateLife } from '../utils/generateLife';
 import { buildLifeMap } from '../utils/buildLifeMap';
 import { liveOn } from '../utils/liveOn';
 
-// triggerEvolution() {
-//   console.log('Evolving!');
-//   this.bufferSwitch = this.bufferSwitch ? false : true;
-//   // console.log(this.state.grid);
-//   // console.log(this.state.gridTwo);
-//   // if (this.bufferSwitch) {
-//   //   this.setState({ grid: liveOn(this.state.gridTwo) });
-//   // } else {
-//   //   this.setState({ gridTwo: liveOn(this.state.grid) });
-//   // }
-//   let temp = liveOn(this.lifeMap);
-//   this.setState({ grid: temp });
-//   this.lifeMap = temp;
-// }
-// Could set a bool inside the class to determine which grid gets shown; flag one as active
 const Grid = () => {
-  // constructor() {
-  //   super();
-  //   // this.grid = [];
-  //   // this.bufferGrid = [];
-  //   this.dimension = 10;
-  //   this.lifeMap = generateLife(this.dimension);
-  //   this.state = {
-  //     grid: buildLifeMap(this.dimension, this.lifeMap),
-  //     gridTwo: liveOn(this.lifeMap),
-  //   };
-  //   this.bufferSwitch = true;
-  // }
   const [grid, setGrid] = useState([]);
   const [nextGrid, setNextGrid] = useState([]);
   const [lifeMap, setLifeMap] = useState(null);
+  const [swapped, setSwapped] = useState(false);
+
+  function simulate() {}
 
   function advanceTime() {
-    setGrid(liveOn(grid));
+    setSwapped(!swapped);
+    if (swapped) {
+      setGrid(liveOn(nextGrid));
+    } else {
+      setNextGrid(liveOn(grid));
+    }
   }
 
   function buffer() {
@@ -51,9 +32,11 @@ const Grid = () => {
     }, 8000);
   }
 
+  let key = 0;
   return (
     <div>
       <div>
+        <button onClick={() => simulate()}>Run Simulation</button>
         <button onClick={() => advanceTime()}>Live and Let Die</button>
         <button onClick={() => buffer()}>Buffer</button>
         <button onClick={() => setGrid(buildLifeMap(lifeMap))}>
@@ -63,15 +46,27 @@ const Grid = () => {
           Generate Lifemap
         </button>
       </div>
-      {grid.map((row) => {
-        return (
-          <div style={{ height: '10px' }}>
-            {row.map((life) => {
-              return <Cell alive={life} />;
-            })}
-          </div>
-        );
-      })}
+      {swapped
+        ? nextGrid.map((row) => {
+            return (
+              <div style={{ height: '10px' }}>
+                {row.map((life) => {
+                  key++;
+                  return <Cell key={key} alive={life} />;
+                })}
+              </div>
+            );
+          })
+        : grid.map((row) => {
+            return (
+              <div style={{ height: '10px' }}>
+                {row.map((life) => {
+                  key++;
+                  return <Cell key={key} alive={life} />;
+                })}
+              </div>
+            );
+          })}
     </div>
   );
 };

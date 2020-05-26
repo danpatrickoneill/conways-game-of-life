@@ -18,15 +18,17 @@ class Cell extends React.Component {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-  componentDidUpdate() {
-    const canvas = this.canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (this.props.alive) {
-      ctx.fillStyle = '#008000';
-    } else {
-      ctx.fillStyle = '#A9A9A9';
+  componentDidUpdate(prevProps) {
+    if (this.props.alive !== prevProps.alive) {
+      const canvas = this.canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      if (this.props.alive) {
+        ctx.fillStyle = '#008000';
+      } else {
+        ctx.fillStyle = '#A9A9A9';
+      }
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
   toggleLife = (e) => {
