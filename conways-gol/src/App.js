@@ -1,11 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
+import Grid from './components/Grid';
 import './App.css';
 
 function App() {
   return (
     <div className='App'>
-      <header className='App-header'></header>
+      <header className='App-header'>Canvas Practice!</header>
+      <Grid />
     </div>
   );
 }
