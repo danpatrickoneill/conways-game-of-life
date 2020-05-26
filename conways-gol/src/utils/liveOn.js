@@ -50,7 +50,7 @@ export const liveOn = (grid) => {
   let neighbors = [];
   for (let x = 0; x <= edge; x++) {
     for (let y = 0; y <= edge; y++) {
-      if (x == 0 || y === 0) {
+      if (x === 0 || y === 0) {
         lifeMap[x][y] = false;
       } else if (x === edge || y === edge) {
         lifeMap[x][y] = false;
