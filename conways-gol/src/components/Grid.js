@@ -1,5 +1,6 @@
 import React from 'react';
 import Cell from './Cell';
+import { generateLife } from '../utils/generateLife';
 
 // Could set a bool inside the class to determine which grid gets shown; flag one as active
 class Grid extends React.Component {
@@ -8,31 +9,10 @@ class Grid extends React.Component {
     // this.grid = [];
     // this.bufferGrid = [];
     this.dimension = 5;
-    this.mapState = this.generateLife(this.dimension);
+    this.mapState = generateLife(this.dimension);
     this.state = { grid: this.buildGrid(this.dimension) };
     // this.grid = this.buildGrid(this.dimension);
     this.bufferGrid = this.evolveLife(this.mapState, this.dimension);
-  }
-
-  generateLife(dimension) {
-    const grid = [];
-    // Life and death represented here by true and false
-    const states = [true, false];
-    // Allocates rows in grid
-    for (let i = 0; i < dimension; i++) {
-      grid.push([]);
-    }
-    console.log('GRID', grid);
-    let j = 0;
-    while (j < dimension) {
-      for (let i = 0; i < dimension; i++) {
-        let randomIndex = Math.floor(Math.random() * 2);
-        grid[j].push(states[randomIndex]);
-      }
-      j++;
-    }
-
-    return grid;
   }
 
   buildGrid(dimension) {
