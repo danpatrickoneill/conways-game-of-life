@@ -32,17 +32,19 @@ const Grid = () => {
   //   };
   //   this.bufferSwitch = true;
   // }
-  const [grid, setGrid] = useState([
-    [true, true, true],
-    [false, false, false],
-    [true, true, true],
-  ]);
+  const [grid, setGrid] = useState([]);
+  const [lifeMap, setLifeMap] = useState(null);
   return (
     <div>
       <div>
-        <button>Live and Let Die</button>
+        <button onClick={() => setGrid(liveOn(grid))}>Live and Let Die</button>
 
-        <button>Random Initialize</button>
+        <button onClick={() => setGrid(buildLifeMap(10, lifeMap))}>
+          Random Initialize
+        </button>
+        <button onClick={() => setLifeMap(generateLife(10))}>
+          Generate Lifemap
+        </button>
       </div>
       {grid.map((row) => {
         return (
