@@ -1,5 +1,8 @@
 import React from 'react';
 import Cell from './Cell';
+import { generateLife } from '../utils/generateLife';
+import { buildLifeMap } from '../utils/buildLifeMap';
+import { liveOn } from '../utils/liveOn';
 
 // Could set a bool inside the class to determine which grid gets shown; flag one as active
 class Grid extends React.Component {
@@ -7,168 +10,57 @@ class Grid extends React.Component {
     super();
     // this.grid = [];
     // this.bufferGrid = [];
-    this.dimension = 5;
-    this.mapState = this.generateLife(this.dimension);
-    this.state = { grid: this.buildGrid(this.dimension) };
-    // this.grid = this.buildGrid(this.dimension);
-    this.bufferGrid = this.evolveLife(this.mapState, this.dimension);
+    this.dimension = 10;
+    this.lifeMap = generateLife(this.dimension);
+    this.state = {
+      grid: buildLifeMap(this.dimension, this.lifeMap),
+      gridTwo: liveOn(this.lifeMap),
+    };
+    this.bufferSwitch = true;
   }
 
-  generateLife(dimension) {
-    const grid = [];
-    // Life and death represented here by true and false
-    const states = [true, false];
-    // Allocates rows in grid
-    for (let i = 0; i < dimension; i++) {
-      grid.push([]);
-    }
-    console.log('GRID', grid);
-    let j = 0;
-    while (j < dimension) {
-      for (let i = 0; i < dimension; i++) {
-        let randomIndex = Math.floor(Math.random() * 2);
-        grid[j].push(states[randomIndex]);
-      }
-      j++;
-    }
-
-    return grid;
-  }
-
-  buildGrid(dimension) {
-    const grid = [];
-    // Allocates rows in grid
-    for (let i = 0; i < dimension; i++) {
-      grid.push([]);
-    }
-    console.log('GRID', grid);
-    let j = 0;
-    while (j < dimension) {
-      for (let i = 0; i < dimension; i++) {
-        grid[j].push(
-          <Cell key={i + j * dimension} alive={this.mapState[i][j]} />
-        );
-      }
-      j++;
-    }
-    // for (let i = 0; i < dimension; i++) {
-    //   grid.push(row);
-    // }
-
-    return grid;
-  }
-
-  // const gridTwo = buildGrid(dimension);
-  // Just need another function to generate new life grid based on known rules
-  evolveLife(stateMap, dimension) {
-    function findNeighbors(row, column) {
-      // console.log(`FINDING NEIGBORS OF ${row}, ${column}`);
-      const neighbors = [];
-      let upperNeighbors;
-      let lowerNeighbors;
-      let leftNeighbors;
-      let rightNeighbors;
-      // Set rows for upper and lower neighbors
-      if (row === 0) {
-        upperNeighbors = row;
-      } else {
-        upperNeighbors = row - 1;
-      }
-      if (row === dimension - 1) {
-        lowerNeighbors = row;
-      } else {
-        lowerNeighbors = row + 1;
-      }
-      // Set columns for left and right neighbors
-      if (column === 0) {
-        leftNeighbors = column;
-      } else {
-        leftNeighbors = column - 1;
-      }
-      if (column === dimension - 1) {
-        rightNeighbors = column;
-      } else {
-        rightNeighbors = column + 1;
-      }
-      for (let i = leftNeighbors; i < rightNeighbors; i++) {
-        for (let j = upperNeighbors; j < lowerNeighbors; j++) {
-          if ((i, j) !== (row, column)) {
-            console.log(i, j);
-            console.log(stateMap[i][j]);
-            neighbors.push(stateMap[i][j]);
-          }
-        }
-      }
-      // console.log(neighbors);
-      // const liveNeighbors = neighbors.reduce((acc, neighbor) => {
-      //   if (neighbor) {
-      //     acc++;
-      //   }
-      // });
-      console.log(row, column, neighbors);
-      let liveNeighbors = 0;
-      for (let neighbor of neighbors) {
-        if (neighbor === true) {
-          liveNeighbors++;
-        }
-      }
-      return liveNeighbors;
-    }
-    const grid = [];
-    // Life and death represented here by true and false
-    // Allocates rows in grid
-    for (let i = 0; i < dimension; i++) {
-      grid.push([]);
-    }
-    console.log('GRID', grid);
-    let j = 0;
-    while (j < dimension) {
-      for (let i = 0; i < dimension; i++) {
-        if (findNeighbors(i, j) === 3) {
-          grid[i][j] = true;
-        } else if (stateMap[i][j] === true && findNeighbors(i, j) === 2) {
-          grid[i][j] = true;
-        } else {
-          grid[i][j] = false;
-        }
-      }
-      j++;
-    }
-    console.log(grid);
-    return grid;
-  }
-
-  triggerEvolution(grid, bufferGrid) {
+  triggerEvolution() {
     console.log('Evolving!');
-    // console.log(grid);
-    console.log(bufferGrid);
-    this.mapState = bufferGrid;
-    // this.mapState = [
-    //   [true, true, true, true, true],
-    //   [true, true, true, true, true],
-    //   [true, true, false, true, true],
-    //   [true, true, true, true, true],
-    //   [true, true, true, true, true],
-    // ];
-    this.setState({ grid: [this.buildGrid(this.dimension)] });
-    this.bufferGrid = this.evolveLife(this.mapState, this.dimension);
-    console.log(grid);
-    console.log(bufferGrid);
+    this.bufferSwitch = this.bufferSwitch ? false : true;
+    // console.log(this.state.grid);
+    // console.log(this.state.gridTwo);
+    // if (this.bufferSwitch) {
+    //   this.setState({ grid: liveOn(this.state.gridTwo) });
+    // } else {
+    //   this.setState({ gridTwo: liveOn(this.state.grid) });
+    // }
+    let temp = liveOn(this.lifeMap);
+    this.setState({ grid: temp });
+    this.lifeMap = temp;
   }
   render() {
-    // console.log(mapState);
+    // console.log(this.lifeMap);
     return (
       <div>
         <div>
+          <button onClick={() => this.triggerEvolution()}>
+            Live and Let Die
+          </button>
+
           <button
             onClick={() =>
-              this.triggerEvolution(this.state.grid, this.bufferGrid)
+              this.setState({
+                grid: buildLifeMap(this.dimension, this.lifeMap),
+              })
             }
           >
-            Live On
+            Random Initialize
           </button>
         </div>
-        {this.state.grid}
+        {this.state.grid.map((row) => {
+          return (
+            <div>
+              {row.map((life) => {
+                return <Cell alive={life} />;
+              })}
+            </div>
+          );
+        })}
       </div>
     );
   }

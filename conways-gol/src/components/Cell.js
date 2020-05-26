@@ -18,6 +18,17 @@ class Cell extends React.Component {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
+  componentDidUpdate() {
+    const canvas = this.canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (this.props.alive) {
+      ctx.fillStyle = '#008000';
+    } else {
+      ctx.fillStyle = '#A9A9A9';
+    }
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
   toggleLife = (e) => {
     const canvas = this.canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -29,8 +40,8 @@ class Cell extends React.Component {
     return (
       <canvas
         ref={this.canvasRef}
-        width='200'
-        height='200'
+        width='100'
+        height='100'
         onClick={() => window.alert(this.props.alive)}
       ></canvas>
     );
