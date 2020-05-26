@@ -33,13 +33,30 @@ const Grid = () => {
   //   this.bufferSwitch = true;
   // }
   const [grid, setGrid] = useState([]);
+  const [nextGrid, setNextGrid] = useState([]);
   const [lifeMap, setLifeMap] = useState(null);
+
+  function advanceTime() {
+    setGrid(liveOn(grid));
+  }
+
+  function buffer() {
+    setNextGrid(liveOn(grid));
+  }
+
+  async function initialize() {
+    setLifeMap(generateLife(100));
+    setTimeout(() => {
+      setGrid(buildLifeMap(lifeMap));
+    }, 8000);
+  }
+
   return (
     <div>
       <div>
-        <button onClick={() => setGrid(liveOn(grid))}>Live and Let Die</button>
-
-        <button onClick={() => setGrid(buildLifeMap(100, lifeMap))}>
+        <button onClick={() => advanceTime()}>Live and Let Die</button>
+        <button onClick={() => buffer()}>Buffer</button>
+        <button onClick={() => setGrid(buildLifeMap(lifeMap))}>
           Random Initialize
         </button>
         <button onClick={() => setLifeMap(generateLife(100))}>
