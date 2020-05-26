@@ -44,7 +44,7 @@
 // }
 
 export const liveOn = (grid) => {
-  console.log(grid[1]);
+  console.log(grid);
   const lifeMap = JSON.parse(JSON.stringify(grid));
   const edge = grid.length - 1;
   let neighbors = [];
