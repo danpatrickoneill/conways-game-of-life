@@ -1,7 +1,8 @@
 import React from 'react';
 import Cell from '../components/Cell';
 
-export const buildLifeMap = (dimension, lifeMap) => {
+export const buildLifeMap = (lifeMap) => {
+  const dimension = lifeMap.length;
   const grid = [];
   // Allocates rows in grid
   for (let i = 0; i < dimension; i++) {

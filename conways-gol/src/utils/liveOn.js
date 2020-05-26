@@ -47,13 +47,10 @@ export const liveOn = (grid) => {
   console.log(grid[1]);
   const lifeMap = JSON.parse(JSON.stringify(grid));
   const edge = grid.length - 1;
-  console.log(edge);
   let neighbors = [];
   for (let x = 0; x <= edge; x++) {
     for (let y = 0; y <= edge; y++) {
-      console.log(x, y);
-      if (x == 0 || y === 0) {
-        console.log(x, y, 'ZEROOO');
+      if (x === 0 || y === 0) {
         lifeMap[x][y] = false;
       } else if (x === edge || y === edge) {
         lifeMap[x][y] = false;
@@ -62,7 +59,7 @@ export const liveOn = (grid) => {
         neighbors.push(grid[x][y - 1]);
         neighbors.push(grid[x + 1][y - 1]);
         neighbors.push(grid[x - 1][y]);
-        neighbors.push(grid[x + 1][y - 1]);
+        neighbors.push(grid[x + 1][y]);
         neighbors.push(grid[x - 1][y + 1]);
         neighbors.push(grid[x][y + 1]);
         neighbors.push(grid[x + 1][y + 1]);
@@ -87,5 +84,6 @@ export const liveOn = (grid) => {
       }
     }
   }
+  console.log(lifeMap);
   return lifeMap;
 };
