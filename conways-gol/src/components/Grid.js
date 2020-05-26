@@ -1,6 +1,7 @@
 import React from 'react';
 import Cell from './Cell';
 import { generateLife } from '../utils/generateLife';
+import { buildCellGrid } from '../utils/buildCellGrid';
 
 // Could set a bool inside the class to determine which grid gets shown; flag one as active
 class Grid extends React.Component {
@@ -9,33 +10,10 @@ class Grid extends React.Component {
     // this.grid = [];
     // this.bufferGrid = [];
     this.dimension = 5;
-    this.mapState = generateLife(this.dimension);
-    this.state = { grid: this.buildGrid(this.dimension) };
+    this.lifeMap = generateLife(this.dimension);
+    this.state = { grid: buildCellGrid(this.dimension, this.lifeMap) };
     // this.grid = this.buildGrid(this.dimension);
-    this.bufferGrid = this.evolveLife(this.mapState, this.dimension);
-  }
-
-  buildGrid(dimension) {
-    const grid = [];
-    // Allocates rows in grid
-    for (let i = 0; i < dimension; i++) {
-      grid.push([]);
-    }
-    console.log('GRID', grid);
-    let j = 0;
-    while (j < dimension) {
-      for (let i = 0; i < dimension; i++) {
-        grid[j].push(
-          <Cell key={i + j * dimension} alive={this.mapState[i][j]} />
-        );
-      }
-      j++;
-    }
-    // for (let i = 0; i < dimension; i++) {
-    //   grid.push(row);
-    // }
-
-    return grid;
+    this.bufferGrid = this.evolveLife(this.lifeMap, this.dimension);
   }
 
   // const gridTwo = buildGrid(dimension);
@@ -122,21 +100,21 @@ class Grid extends React.Component {
     console.log('Evolving!');
     // console.log(grid);
     console.log(bufferGrid);
-    this.mapState = bufferGrid;
-    // this.mapState = [
+    this.lifeMap = bufferGrid;
+    // this.lifeMap = [
     //   [true, true, true, true, true],
     //   [true, true, true, true, true],
     //   [true, true, false, true, true],
     //   [true, true, true, true, true],
     //   [true, true, true, true, true],
     // ];
-    this.setState({ grid: [this.buildGrid(this.dimension)] });
-    this.bufferGrid = this.evolveLife(this.mapState, this.dimension);
+    this.setState({ grid: [buildCellGrid(this.dimension, this.lifeMap)] });
+    this.bufferGrid = this.evolveLife(this.lifeMap, this.dimension);
     console.log(grid);
     console.log(bufferGrid);
   }
   render() {
-    // console.log(mapState);
+    // console.log(this.lifeMap);
     return (
       <div>
         <div>
