@@ -42,8 +42,8 @@ class Cell extends React.Component {
     return (
       <canvas
         ref={this.canvasRef}
-        width='10'
-        height='10'
+        width='5'
+        height='5'
         onClick={() => window.alert(this.props.alive)}
       ></canvas>
     );
